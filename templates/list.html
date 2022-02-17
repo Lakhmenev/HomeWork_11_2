@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="#" />
+    <title>Список кандидатов</title>
+</head>
+<body>
+   <h1>Список всех кандидатов</h1>
+
+   <h5>Фильтр по навыкам</h5>
+   <form name="skill" method="POST" action="/">
+   <select name="select_skull">
+        <option disabled>Выберите из списка</option>
+        {% for skill in list_skills %}
+            <option value="{{skill}}">{{skill}}</option>
+        {% endfor %}
+        <input type="submit" value="Применить">
+   </select>
+   </form>
+
+   <h5>Поиск кандидата по имени</h5>
+    <form method="POST" action="/">
+        <input type="text" name="str_find">
+        <input type="submit" value="Поиск">
+    </form>
+
+    {% for person in candidates %}
+        <p><a href="/person/{{person['id']}}">{{ person['name']}}</a></p>
+    {% endfor %}
+</body>
+</html>

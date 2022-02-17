@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="#" />
+    <title>Фильтр по скилу</title>
+</head>
+<body>
+    <h1>Отфильтрованные по скилу кандидаты</h1>
+    <pre>
+    {% for person in candidates %}
+    Имя кандидата - {{ person['name'] }}
+    Позиция кандидата - {{ person['position'] }}
+    Навыки: {{ person['skills'] }}
+    Пол - {{ person['gender'] }}
+    Возраст - {{ person['age'] }}
+    {% endfor %}
+    </pre>
+</body>
+</html>
