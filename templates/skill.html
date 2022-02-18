@@ -7,6 +7,15 @@
 </head>
 <body>
     <h1>Отфильтрованные по скилу кандидаты</h1>
+    <h4>всего найдено - "{{find_candidates}}" по скилу {{skill}}</h4>
+    <h4>лимит вывода  на страницу - {{limit}}</h4>
+    <h4>результаты с {{start_position}} по {{finish_position}}</h4>
+
+    <form method="POST">
+        <input type="text" name="limit_count">
+        <input type="submit" value="Задать другой  лимит вывода">
+    </form>
+
     <pre>
     {% for person in candidates %}
     Имя кандидата - {{ person['name'] }}

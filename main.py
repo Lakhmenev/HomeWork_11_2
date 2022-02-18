@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
-from utils import load_candidates_from_json, get_candidate_id, get_sort_skill, get_candidates_by_skill, get_candidates_by_name
+from utils import load_candidates_from_json, get_candidate_id, get_sort_skill, get_candidates_by_skill, \
+    get_candidates_by_name
 
 
 app = Flask(__name__)
@@ -28,17 +29,32 @@ def candidate(person_id):
     return render_template('person.html', candidates=person)
 
 
-@app.route("/skill/<x>/", methods=['GET'])
+@app.route("/skill/<x>/", methods=['GET', 'POST'])
 def skill(x):
+    limit = 8
+    if request.method == 'POST':
+        limit_count = request.form.get('limit_count')
+        if limit_count is not None and limit_count.isdigit():
+            limit = int(limit_count)
+
     candidates_filter = get_candidates_by_skill(all_candidates, x)
-    return render_template('skill.html', candidates=candidates_filter)
+    find_candidates = str(len(candidates_filter))
+
+    start_position = 0
+    if limit < len(candidates_filter):
+        finish_position = limit
+    else:
+        finish_position = len(candidates_filter)
+
+    return render_template('skill.html', candidates=candidates_filter[start_position: finish_position],
+                           find_candidates=find_candidates, limit=str(limit),
+                           start_position=str(start_position+1), finish_position=str(finish_position), skill=x)
 
 
 @app.route("/search/<find_str>/", methods=['GET'])
 def candidates_name(find_str):
     find_list = get_candidates_by_name(find_str, all_candidates)
     count = str(len(find_list))
-    # return render_template('search.html', find_list=find_list)
     return render_template('search.html', count=count, find_str=find_str, find_list=find_list)
 
 
