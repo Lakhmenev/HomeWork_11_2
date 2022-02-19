@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect
-from utils import load_candidates_from_json, get_candidate_id, get_sort_skill, get_candidates_by_skill, \
-    get_candidates_by_name
+import utils
 
 
 app = Flask(__name__)
@@ -18,14 +17,14 @@ def page_index():
             return redirect(f"/search/{select_find}")
 
     # Получим уникальный список скилов  для формирования выпадающего списка фильтра
-    list_skills = get_sort_skill(all_candidates)
+    list_skills = utils.get_sort_skill(all_candidates)
 
     return render_template('list.html', candidates=all_candidates, list_skills=list_skills)
 
 
 @app.route("/person/<person_id>/", methods=['GET'])
 def candidate(person_id):
-    person = get_candidate_id(person_id, all_candidates)
+    person = utils.get_candidate_id(person_id, all_candidates)
     return render_template('person.html', candidates=person)
 
 
@@ -37,7 +36,7 @@ def skill(x):
         if limit_count is not None and limit_count.isdigit():
             limit = int(limit_count)
 
-    candidates_filter = get_candidates_by_skill(all_candidates, x)
+    candidates_filter = utils.get_candidates_by_skill(all_candidates, x)
     find_candidates = str(len(candidates_filter))
 
     start_position = 0
@@ -53,13 +52,13 @@ def skill(x):
 
 @app.route("/search/<find_str>/", methods=['GET'])
 def candidates_name(find_str):
-    find_list = get_candidates_by_name(find_str, all_candidates)
+    find_list = utils.get_candidates_by_name(find_str, all_candidates)
     count = str(len(find_list))
     return render_template('search.html', count=count, find_str=find_str, find_list=find_list)
 
 
 if __name__ == '__main__':
-    all_candidates = load_candidates_from_json('candidates.json')
+    all_candidates = utils.load_candidates_from_json('candidates.json')
     if all_candidates is not None:
         # Активация  режима отладки  для  автоперезапуска сервера  при  изменении кода
         app.debug = True
